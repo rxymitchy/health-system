@@ -13,8 +13,8 @@
                 </div>
                 
                 <div class="card-body p-4">
-                    <form method="POST">
-                        {{ form.hidden_tag() }}
+                    <form method="POST" id="enrollmentForm">
+                        {% if form %}{{ form.hidden_tag() }}{% endif %}
                         
                         <div class="mb-4">
                             <h5 class="fw-semibold mb-3 text-center">
@@ -22,19 +22,19 @@
                             </h5>
                             
                             <div class="list-group">
-                                {% for program in form.programs %}
+                                {% for program in all_programs %}
                                 <div class="list-group-item border-0 py-3">
                                     <div class="form-check">
                                         <input class="form-check-input me-3" 
                                                type="checkbox" 
-                                               id="program-{{ program.data }}" 
+                                               id="program-{{ program.id }}" 
                                                name="programs" 
-                                               value="{{ program.data }}"
-                                               {% if program.checked %}checked{% endif %}>
+                                               value="{{ program.id }}"
+                                               {% if program in client.programs %}checked{% endif %}>
                                         <label class="form-check-label d-flex align-items-center" 
-                                               for="program-{{ program.data }}">
+                                               for="program-{{ program.id }}">
                                             <div class="ms-2">
-                                                <h6 class="mb-1 fw-semibold">{{ program.label.text }}</h6>
+                                                <h6 class="mb-1 fw-semibold">{{ program.name }}</h6>
                                                 {% if program.description %}
                                                 <small class="text-muted">{{ program.description }}</small>
                                                 {% endif %}
@@ -78,4 +78,14 @@
         background-color: #f8f9fa;
     }
 </style>
+
+<script>
+    document.getElementById('enrollmentForm').addEventListener('submit', function(e) {
+        const checkedBoxes = document.querySelectorAll('input[name="programs"]:checked');
+        if (checkedBoxes.length === 0) {
+            e.preventDefault();
+            alert('Please select at least one program');
+        }
+    });
+</script>
 {% endblock %}

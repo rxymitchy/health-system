@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from app.models import Program, Client, Enrollment, db
+from datetime import datetime
 from app.forms import ProgramForm, ClientForm, EnrollmentForm
 
 main = Blueprint('main', __name__)
@@ -152,29 +153,38 @@ def delete_client(client_id):
 @main.route('/client/<int:client_id>/enroll', methods=['GET', 'POST'])
 def enroll_client(client_id):
     client = Client.query.get_or_404(client_id)
-    form = EnrollmentForm()
+    form = EnrollmentForm()  # Create form instance
     
-    # Get all programs and set choices
+    # Get all available programs
     all_programs = Program.query.order_by(Program.name).all()
-    form.programs.choices = [(p.id, p.name) for p in all_programs]
     
-    if form.validate_on_submit():
-        # Clear existing enrollments
-        client.programs = []
+    if request.method == 'POST':
+        try:
+            # Get selected program IDs
+            selected_programs = request.form.getlist('programs')
+            
+            # Clear existing enrollments
+            Enrollment.query.filter_by(client_id=client.id).delete()
+            
+            # Add new enrollments
+            for program_id in selected_programs:
+                enrollment = Enrollment(
+                    client_id=client.id,
+                    program_id=program_id,
+                    enrollment_date=datetime.utcnow(),
+                    is_active=True
+                )
+                db.session.add(enrollment)
+            
+            db.session.commit()
+            flash('Enrollment updated successfully!', 'success')
+            return redirect(url_for('main.client_detail', client_id=client.id))
         
-        # Add selected programs
-        for program_id in form.programs.data:
-            program = Program.query.get(program_id)
-            if program:
-                client.programs.append(program)
-        
-        db.session.commit()
-        flash('Enrollment updated successfully!', 'success')
-        return redirect(url_for('main.client_detail', client_id=client.id))
+        except Exception as e:
+            db.session.rollback()
+            flash(f'Error updating enrollment: {str(e)}', 'danger')
     
-    # Preselect currently enrolled programs
-    form.programs.data = [p.id for p in client.programs]
-    
-    return render_template('enroll_client.html', 
+    return render_template('enroll_client.html',
                          client=client,
-                         form=form)
+                         all_programs=all_programs,
+                         form=form)  # Pass the form to template

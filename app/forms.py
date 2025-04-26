@@ -25,7 +25,7 @@ class EnrollmentForm(FlaskForm):
     programs = SelectMultipleField(
         'Programs',
         coerce=int,
-        validators=[DataRequired()],
-        render_kw={"class": "form-check-input"}
+        validators=[DataRequired(message="Please select at least one program")],
+        render_kw={"class": "form-select", "size": "8"}
     )
-    submit = SubmitField('Save Enrollments')
+    submit = SubmitField('Confirm Enrollment')
