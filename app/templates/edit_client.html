@@ -1,68 +1,75 @@
 {% extends "base.html" %}
 
-{% block content %}
-<div class="row">
-    <div class="col-md-8 mx-auto">
-        <div class="card">
-            <div class="card-header">
-                <h4>Edit Client: {{ client.full_name }}</h4>
-            </div>
-            <div class="card-body">
-                <form method="POST">
-                    {{ form.hidden_tag() }}
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            {{ form.first_name.label(class="form-label") }}
-                            {{ form.first_name(class="form-control") }}
-                            {% for error in form.first_name.errors %}
-                            <span class="text-danger">{{ error }}</span>
-                            {% endfor %}
+{% block app_content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <div class="form-card">
+                <div class="form-header">
+                    <h4 class="mb-0">Edit Client Profile</h4>
+                    <p class="mb-0 opacity-75">Update client information</p>
+                </div>
+                
+                <div class="card-body p-4">
+                    <form method="POST">
+                        {{ form.hidden_tag() }}
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <div class="form-floating mb-3">
+                                    {{ form.first_name(class="form-control", placeholder="First Name") }}
+                                    {{ form.first_name.label }}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating mb-3">
+                                    {{ form.last_name(class="form-control", placeholder="Last Name") }}
+                                    {{ form.last_name.label }}
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-md-6">
-                            {{ form.last_name.label(class="form-label") }}
-                            {{ form.last_name(class="form-control") }}
-                            {% for error in form.last_name.errors %}
-                            <span class="text-danger">{{ error }}</span>
-                            {% endfor %}
+                        
+                        <div class="form-floating mb-3">
+                            {{ form.email(class="form-control", placeholder="Email") }}
+                            {{ form.email.label }}
                         </div>
-                    </div>
-                    
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            {{ form.email.label(class="form-label") }}
-                            {{ form.email(class="form-control") }}
-                            {% for error in form.email.errors %}
-                            <span class="text-danger">{{ error }}</span>
-                            {% endfor %}
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <div class="form-floating mb-3">
+                                    {{ form.phone(class="form-control", placeholder="Phone") }}
+                                    {{ form.phone.label }}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating mb-3">
+                                    {{ form.date_of_birth(class="form-control", placeholder="Date of Birth") }}
+                                    {{ form.date_of_birth.label }}
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-md-6">
-                            {{ form.phone.label(class="form-label") }}
-                            {{ form.phone(class="form-control") }}
-                        </div>
-                    </div>
-                    
-                    <div class="mb-3">
-                        {{ form.address.label(class="form-label") }}
-                        {{ form.address(class="form-control", rows=3) }}
-                    </div>
-                    
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            {{ form.date_of_birth.label(class="form-label") }}
-                            {{ form.date_of_birth(class="form-control") }}
-                        </div>
-                        <div class="col-md-6">
-                            {{ form.gender.label(class="form-label") }}
+                        
+                        <div class="form-floating mb-3">
                             {{ form.gender(class="form-select") }}
+                            {{ form.gender.label }}
                         </div>
-                    </div>
-                    
-                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                        <a href="{{ url_for('main.client_detail', client_id=client.id) }}" 
-                           class="btn btn-secondary me-md-2">Cancel</a>
-                        {{ form.submit(class="btn btn-primary") }}
-                    </div>
-                </form>
+                        
+                        <div class="form-floating mb-4">
+                            {{ form.address(class="form-control", placeholder="Address", style="height: 100px") }}
+                            {{ form.address.label }}
+                        </div>
+                        
+                        <div class="d-flex justify-content-between">
+                            <a href="{{ url_for('main.client_detail', client_id=client.id) }}" 
+                               class="btn btn-outline-secondary btn-rounded">
+                                <i class="bi bi-arrow-left"></i> Cancel
+                            </a>
+                            <button type="submit" class="btn btn-primary btn-rounded">
+                                <i class="bi bi-check-circle"></i> Save Changes
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>

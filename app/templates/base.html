@@ -3,22 +3,30 @@
 {% block title %}Health Information System{% endblock %}
 
 {% block navbar %}
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary py-2">
     <div class="container">
-        <a class="navbar-brand" href="{{ url_for('main.index') }}">Health System</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
+        <a class="navbar-brand text-white fw-bold" href="{{ url_for('main.index') }}">
+            <i class="bi bi-heart-pulse me-2"></i>Health System
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('main.index') }}">Home</a>
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item mx-1">
+                    <a class="nav-link text-white fw-medium px-3 py-2" href="{{ url_for('main.index') }}">
+                        <i class="bi bi-house-door me-1"></i> Home
+                    </a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('main.programs') }}">Programs</a>
+                <li class="nav-item mx-1">
+                    <a class="nav-link text-white fw-medium px-3 py-2" href="{{ url_for('main.programs') }}">
+                        <i class="bi bi-clipboard-pulse me-1"></i> Programs
+                    </a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('main.clients') }}">Clients</a>
+                <li class="nav-item mx-1">
+                    <a class="nav-link text-white fw-medium px-3 py-2" href="{{ url_for('main.clients') }}">
+                        <i class="bi bi-people me-1"></i> Clients
+                    </a>
                 </li>
             </ul>
         </div>
@@ -74,6 +82,85 @@
         border-radius: 10px;
         padding: 2rem 0;
         margin: 2rem 0;
+    }
+
+    /* Navbar Container */
+    .navbar {
+        background-color: #afd6f5 !important;
+        padding: 1rem 2rem; /* Increased padding */
+    }
+
+    /* Brand/Logo - Left Side */
+    .navbar-brand {
+        color: #0d6efd !important;
+        font-size: 1.8rem !important; /* Larger text */
+        font-weight: 700;
+        margin-right: 3rem; /* Pushes nav items right */
+        transition: all 0.3s ease;
+    }
+    
+    .navbar-brand:hover {
+        transform: scale(1.03);
+    }
+
+    /* Navigation Links - Right Side */
+    .navbar-nav {
+        margin-left: auto !important; /* Force right alignment */
+        gap: 2.5rem !important; /* Increased spacing between links */
+    }
+
+    .nav-link {
+        color: #0d6efd !important;
+        font-size: 1.1rem;
+        font-weight: 500;
+        padding: 0.5rem 1rem !important;
+        transition: all 0.3s ease;
+        position: relative;
+    }
+
+    /* Hover Effect */
+    .nav-link:hover {
+        color: white !important;
+        background: linear-gradient(135deg, #0d6efd 0%, #3d8bfd 100%);
+        transform: translateY(-2px);
+        border-radius: 6px;
+        box-shadow: 0 4px 8px rgba(13, 110, 253, 0.2);
+    }
+
+    /* Active Link */
+    .nav-link.active {
+        color: white !important;
+        background: linear-gradient(135deg, #0a58ca 0%, #0d6efd 100%);
+        font-weight: 600;
+        border-radius: 6px;
+    }
+
+    /* Mobile Menu Button */
+    .navbar-toggler {
+        border: none;
+        padding: 0.5rem;
+    }
+    
+    .navbar-toggler:focus {
+        box-shadow: 0 0 0 0.15rem rgba(13, 110, 253, 0.25);
+    }
+    
+    .navbar-toggler-icon {
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%2813, 110, 253, 0.8%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+        width: 1.5em;
+        height: 1.5em;
+    }
+
+    /* Mobile Menu Dropdown */
+    @media (max-width: 992px) {
+        .navbar-nav {
+            gap: 1rem !important;
+            padding: 1rem 0;
+        }
+        
+        .nav-link {
+            padding: 0.75rem 1.5rem !important;
+        }
     }
 </style>
 {% endblock %}

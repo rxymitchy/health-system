@@ -4,6 +4,7 @@ from app.forms import ProgramForm, ClientForm, EnrollmentForm
 
 main = Blueprint('main', __name__)
 
+
 @main.route('/')
 def index():
     try:
@@ -21,6 +22,8 @@ def index():
                          client_count=client_count,
                          enrollment_count=enrollment_count)
 
+
+
 @main.route('/programs', methods=['GET', 'POST'])
 def programs():
     form = ProgramForm()
@@ -33,6 +36,8 @@ def programs():
     
     programs = Program.query.all()
     return render_template('programs.html', form=form, programs=programs)
+
+
 
 @main.route('/clients', methods=['GET', 'POST'])
 def clients():
@@ -59,6 +64,9 @@ def clients():
                          clients=clients,
                          search_query=None)
 
+
+
+
 @main.route('/client/<int:client_id>', methods=['GET', 'POST'])
 def client_detail(client_id):
     client = Client.query.get_or_404(client_id)
@@ -76,6 +84,9 @@ def client_detail(client_id):
     
     return render_template('client_detail.html', client=client, form=form)
 
+
+
+
 @main.route('/client/<int:client_id>/remove_program/<int:program_id>')
 def remove_enrollment(client_id, program_id):
     client = Client.query.get_or_404(client_id)
@@ -88,6 +99,9 @@ def remove_enrollment(client_id, program_id):
     
     return redirect(url_for('main.client_detail', client_id=client.id))
 
+
+
+
 @main.route('/clients/search')
 def search_clients():
     search_query = request.args.get('q', '').strip()
@@ -95,7 +109,6 @@ def search_clients():
     if not search_query:
         return redirect(url_for('main.clients'))
     
-    # Search in first name, last name, email, or phone fields
     clients = Client.query.filter(
         (Client.first_name.ilike(f'%{search_query}%')) |
         (Client.last_name.ilike(f'%{search_query}%')) |
@@ -103,10 +116,12 @@ def search_clients():
         (Client.phone.ilike(f'%{search_query}%'))
     ).all()
     
-    return render_template('clients.html', 
-                         clients=clients, 
-                         search_query=search_query,
-                         form=ClientForm())
+    return render_template('search_results.html', 
+                        clients=clients,
+                        search_query=search_query)
+
+
+
 
 @main.route('/client/<int:client_id>/edit', methods=['GET', 'POST'])
 def edit_client(client_id):
@@ -121,6 +136,9 @@ def edit_client(client_id):
     
     return render_template('edit_client.html', form=form, client=client)
 
+
+
+
 @main.route('/client/<int:client_id>/delete', methods=['POST'])
 def delete_client(client_id):
     client = Client.query.get_or_404(client_id)
@@ -128,3 +146,35 @@ def delete_client(client_id):
     db.session.commit()
     flash('Client deleted successfully!', 'success')
     return redirect(url_for('main.clients'))
+
+
+
+@main.route('/client/<int:client_id>/enroll', methods=['GET', 'POST'])
+def enroll_client(client_id):
+    client = Client.query.get_or_404(client_id)
+    form = EnrollmentForm()
+    
+    # Get all programs and set choices
+    all_programs = Program.query.order_by(Program.name).all()
+    form.programs.choices = [(p.id, p.name) for p in all_programs]
+    
+    if form.validate_on_submit():
+        # Clear existing enrollments
+        client.programs = []
+        
+        # Add selected programs
+        for program_id in form.programs.data:
+            program = Program.query.get(program_id)
+            if program:
+                client.programs.append(program)
+        
+        db.session.commit()
+        flash('Enrollment updated successfully!', 'success')
+        return redirect(url_for('main.client_detail', client_id=client.id))
+    
+    # Preselect currently enrolled programs
+    form.programs.data = [p.id for p in client.programs]
+    
+    return render_template('enroll_client.html', 
+                         client=client,
+                         form=form)

@@ -22,5 +22,10 @@ class ClientForm(FlaskForm):
     submit = SubmitField('Save Client')
 
 class EnrollmentForm(FlaskForm):
-    programs = SelectMultipleField('Programs', coerce=int)
-    submit = SubmitField('Enroll')
+    programs = SelectMultipleField(
+        'Programs',
+        coerce=int,
+        validators=[DataRequired()],
+        render_kw={"class": "form-check-input"}
+    )
+    submit = SubmitField('Save Enrollments')

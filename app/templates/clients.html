@@ -132,6 +132,11 @@
                                        class="btn btn-sm btn-outline-secondary">
                                         Edit
                                     </a>
+
+                                    <a href="{{ url_for('main.enroll_client', client_id=client.id) }}"
+                                        class="btn btn-sm btn-outline-success">
+                                        Enroll
+                                    </a>
                                 </td>
                             </tr>
                             {% endfor %}
