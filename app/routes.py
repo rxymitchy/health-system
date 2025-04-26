@@ -1,12 +1,25 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
-from app.models import Program, Client, db
+from app.models import Program, Client, Enrollment, db
 from app.forms import ProgramForm, ClientForm, EnrollmentForm
 
 main = Blueprint('main', __name__)
 
 @main.route('/')
 def index():
-    return redirect(url_for('main.programs'))
+    try:
+        program_count = Program.query.count()
+        client_count = Client.query.count()
+        enrollment_count = Enrollment.query.filter_by(is_active=True).count()
+    except:
+        # Handle case when tables don't exist yet
+        program_count = 0
+        client_count = 0
+        enrollment_count = 0
+    
+    return render_template('index.html',
+                         program_count=program_count,
+                         client_count=client_count,
+                         enrollment_count=enrollment_count)
 
 @main.route('/programs', methods=['GET', 'POST'])
 def programs():

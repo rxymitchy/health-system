@@ -26,7 +26,21 @@ class Client(db.Model):
         return f"{self.first_name} {self.last_name}"
 
 enrollments = db.Table('enrollments',
-    db.Column('client_id', db.Integer, db.ForeignKey('client.id'), primary_key=True),
-    db.Column('program_id', db.Integer, db.ForeignKey('program.id'), primary_key=True),
-    db.Column('enrolled_at', db.DateTime, default=datetime.utcnow)
+    db.Column('client_id', db.Integer, db.ForeignKey('client.id')),
+    db.Column('program_id', db.Integer, db.ForeignKey('program.id')),
+    db.Column('enrollment_date', db.DateTime, default=datetime.utcnow),
+    db.Column('is_active', db.Boolean, default=True)
 )
+
+class Enrollment(db.Model):
+    __tablename__ = 'enrollment'
+    id = db.Column(db.Integer, primary_key=True)
+    client_id = db.Column(db.Integer, db.ForeignKey('client.id'))
+    program_id = db.Column(db.Integer, db.ForeignKey('program.id'))
+    enrollment_date = db.Column(db.DateTime, default=datetime.utcnow)
+    is_active = db.Column(db.Boolean, default=True)
+    notes = db.Column(db.Text)
+    
+    # Relationships
+    client = db.relationship('Client', backref='enrollments')
+    program = db.relationship('Program', backref='enrollments')
