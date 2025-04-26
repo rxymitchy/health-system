@@ -142,29 +142,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## Contact
 
 For questions or support, contact:  
-[Your Name] - [your.email@example.com]  
+[Your Name] - [lucianamitchell19@gmail.com]  
 Project Link: [https://github.com/yourusername/health-system](https://github.com/yourusername/health-system)
 ```
-
-### Key Sections to Customize:
-
-1. **Screenshots**: Replace with actual screenshots of your system
-2. **Contact Information**: Add your details
-3. **Project Links**: Update GitHub URLs
-4. **Features**: Add any additional features you've implemented
-5. **Deployment**: Add specific deployment instructions if needed
-
-### Recommended Additions:
-
-1. Add actual screenshots in a `/screenshots` folder
-2. Include a `CONTRIBUTING.md` for detailed contribution guidelines
-3. Add a `LICENSE` file
-4. Include a `CHANGELOG.md` for version history
-
-This README provides:
-- Clear installation instructions
-- Project overview
-- Technology stack
-- Development setup
-- Basic documentation
-- Contribution guidelines
