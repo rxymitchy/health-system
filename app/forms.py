@@ -9,6 +9,7 @@ class ProgramForm(FlaskForm):
 class ClientForm(FlaskForm):
     name = StringField('Full Name', validators=[DataRequired()])
     email = StringField('Email', validators=[DataRequired(), Email()])
+    phone = StringField('Phone')
     submit = SubmitField('Add Client')
 
 class EnrollmentForm(FlaskForm):

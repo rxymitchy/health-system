@@ -25,14 +25,21 @@ def programs():
 def clients():
     form = ClientForm()
     if form.validate_on_submit():
-        client = Client(name=form.name.data, email=form.email.data)
+        client = Client(
+            name=form.name.data,
+            email=form.email.data,
+            phone=form.phone.data
+        )
         db.session.add(client)
         db.session.commit()
         flash('Client added successfully!', 'success')
         return redirect(url_for('main.clients'))
     
-    clients = Client.query.all()
-    return render_template('clients.html', form=form, clients=clients)
+    clients = Client.query.order_by(Client.name).all()
+    return render_template('clients.html', 
+                         form=form, 
+                         clients=clients,
+                         search_query=None)
 
 @main.route('/client/<int:client_id>', methods=['GET', 'POST'])
 def client_detail(client_id):
@@ -62,3 +69,22 @@ def remove_enrollment(client_id, program_id):
         flash('Program removed from client!', 'success')
     
     return redirect(url_for('main.client_detail', client_id=client.id))
+
+@main.route('/clients/search')
+def search_clients():
+    search_query = request.args.get('q', '').strip()
+    
+    if not search_query:
+        return redirect(url_for('main.clients'))
+    
+    # Search in name, email, or phone fields
+    clients = Client.query.filter(
+        (Client.name.ilike(f'%{search_query}%')) |
+        (Client.email.ilike(f'%{search_query}%')) |
+        (Client.phone.ilike(f'%{search_query}%'))
+    ).all()
+    
+    return render_template('clients.html', 
+                         clients=clients, 
+                         search_query=search_query,
+                         form=ClientForm())
