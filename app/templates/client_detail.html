@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-6">
+        <h2>Client: {{ client.name }}</h2>
+        <p><strong>Email:</strong> {{ client.email }}</p>
+        
+        <h4 class="mt-4">Enroll in Programs</h4>
+        <form method="POST">
+            {{ form.hidden_tag() }}
+            <div class="mb-3">
+                {{ form.programs.label(class="form-label") }}
+                {{ form.programs(class="form-select", size=5) }}
+            </div>
+            {{ form.submit(class="btn btn-primary") }}
+        </form>
+    </div>
+    
+    <div class="col-md-6">
+        <h3>Current Programs</h3>
+        {% if client.programs %}
+        <ul class="list-group">
+            {% for program in client.programs %}
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                {{ program.name }}
+                <a href="{{ url_for('main.remove_enrollment', client_id=client.id, program_id=program.id) }}" 
+                   class="btn btn-sm btn-danger">Remove</a>
+            </li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <p>Not enrolled in any programs yet.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
