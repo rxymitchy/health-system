@@ -26,16 +26,21 @@ def clients():
     form = ClientForm()
     if form.validate_on_submit():
         client = Client(
-            name=form.name.data,
+            first_name=form.first_name.data,
+            last_name=form.last_name.data,
             email=form.email.data,
-            phone=form.phone.data
+            phone=form.phone.data,
+            address=form.address.data,
+            date_of_birth=form.date_of_birth.data,
+            gender=form.gender.data
         )
         db.session.add(client)
         db.session.commit()
         flash('Client added successfully!', 'success')
         return redirect(url_for('main.clients'))
     
-    clients = Client.query.order_by(Client.name).all()
+    # Order by last name then first name
+    clients = Client.query.order_by(Client.last_name, Client.first_name).all()
     return render_template('clients.html', 
                          form=form, 
                          clients=clients,
@@ -77,9 +82,10 @@ def search_clients():
     if not search_query:
         return redirect(url_for('main.clients'))
     
-    # Search in name, email, or phone fields
+    # Search in first name, last name, email, or phone fields
     clients = Client.query.filter(
-        (Client.name.ilike(f'%{search_query}%')) |
+        (Client.first_name.ilike(f'%{search_query}%')) |
+        (Client.last_name.ilike(f'%{search_query}%')) |
         (Client.email.ilike(f'%{search_query}%')) |
         (Client.phone.ilike(f'%{search_query}%'))
     ).all()
@@ -88,3 +94,24 @@ def search_clients():
                          clients=clients, 
                          search_query=search_query,
                          form=ClientForm())
+
+@main.route('/client/<int:client_id>/edit', methods=['GET', 'POST'])
+def edit_client(client_id):
+    client = Client.query.get_or_404(client_id)
+    form = ClientForm(obj=client)
+    
+    if form.validate_on_submit():
+        form.populate_obj(client)
+        db.session.commit()
+        flash('Client updated successfully!', 'success')
+        return redirect(url_for('main.client_detail', client_id=client.id))
+    
+    return render_template('edit_client.html', form=form, client=client)
+
+@main.route('/client/<int:client_id>/delete', methods=['POST'])
+def delete_client(client_id):
+    client = Client.query.get_or_404(client_id)
+    db.session.delete(client)
+    db.session.commit()
+    flash('Client deleted successfully!', 'success')
+    return redirect(url_for('main.clients'))

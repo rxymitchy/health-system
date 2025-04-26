@@ -31,13 +31,24 @@
             <div class="card-body">
                 <form method="POST">
                     {{ form.hidden_tag() }}
-                    <div class="mb-3">
-                        {{ form.name.label(class="form-label") }}
-                        {{ form.name(class="form-control") }}
-                        {% for error in form.name.errors %}
-                        <span class="text-danger">{{ error }}</span>
-                        {% endfor %}
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            {{ form.first_name.label(class="form-label") }}
+                            {{ form.first_name(class="form-control") }}
+                            {% for error in form.first_name.errors %}
+                            <span class="text-danger">{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                        <div class="col-md-6">
+                            {{ form.last_name.label(class="form-label") }}
+                            {{ form.last_name(class="form-control") }}
+                            {% for error in form.last_name.errors %}
+                            <span class="text-danger">{{ error }}</span>
+                            {% endfor %}
+                        </div>
                     </div>
+                    
                     <div class="mb-3">
                         {{ form.email.label(class="form-label") }}
                         {{ form.email(class="form-control") }}
@@ -45,6 +56,7 @@
                         <span class="text-danger">{{ error }}</span>
                         {% endfor %}
                     </div>
+                    
                     <div class="mb-3">
                         {{ form.phone.label(class="form-label") }}
                         {{ form.phone(class="form-control") }}
@@ -52,6 +64,31 @@
                         <span class="text-danger">{{ error }}</span>
                         {% endfor %}
                     </div>
+                    
+                    <div class="mb-3">
+                        {{ form.date_of_birth.label(class="form-label") }}
+                        {{ form.date_of_birth(class="form-control") }}
+                        {% for error in form.date_of_birth.errors %}
+                        <span class="text-danger">{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                    
+                    <div class="mb-3">
+                        {{ form.gender.label(class="form-label") }}
+                        {{ form.gender(class="form-select") }}
+                        {% for error in form.gender.errors %}
+                        <span class="text-danger">{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                    
+                    <div class="mb-3">
+                        {{ form.address.label(class="form-label") }}
+                        {{ form.address(class="form-control", rows=3) }}
+                        {% for error in form.address.errors %}
+                        <span class="text-danger">{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                    
                     <button type="submit" class="btn btn-primary w-100">Add Client</button>
                 </form>
             </div>
@@ -72,7 +109,8 @@
                     <table class="table table-hover">
                         <thead>
                             <tr>
-                                <th>Name</th>
+                                <th>First Name</th>
+                                <th>Last Name</th>
                                 <th>Email</th>
                                 <th>Phone</th>
                                 <th>Actions</th>
@@ -81,13 +119,18 @@
                         <tbody>
                             {% for client in clients %}
                             <tr>
-                                <td>{{ client.name }}</td>
+                                <td>{{ client.first_name }}</td>
+                                <td>{{ client.last_name }}</td>
                                 <td>{{ client.email }}</td>
                                 <td>{{ client.phone or '-' }}</td>
                                 <td>
                                     <a href="{{ url_for('main.client_detail', client_id=client.id) }}" 
-                                       class="btn btn-sm btn-outline-primary">
+                                       class="btn btn-sm btn-outline-primary me-1">
                                         View
+                                    </a>
+                                    <a href="{{ url_for('main.edit_client', client_id=client.id) }}" 
+                                       class="btn btn-sm btn-outline-secondary">
+                                        Edit
                                     </a>
                                 </td>
                             </tr>

@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, SelectMultipleField
+from wtforms import DateField, SelectField, TextAreaField, StringField, SubmitField, SelectMultipleField
 from wtforms.validators import DataRequired, Email
 
 class ProgramForm(FlaskForm):
@@ -7,10 +7,19 @@ class ProgramForm(FlaskForm):
     submit = SubmitField('Add Program')
 
 class ClientForm(FlaskForm):
-    name = StringField('Full Name', validators=[DataRequired()])
+    first_name = StringField('First Name', validators=[DataRequired()])
+    last_name = StringField('Last Name', validators=[DataRequired()])
     email = StringField('Email', validators=[DataRequired(), Email()])
     phone = StringField('Phone')
-    submit = SubmitField('Add Client')
+    address = TextAreaField('Address')
+    date_of_birth = DateField('Date of Birth', format='%Y-%m-%d')
+    gender = SelectField('Gender', choices=[
+        ('', 'Select Gender'),
+        ('male', 'Male'),
+        ('female', 'Female'),
+        ('other', 'Other')
+    ])
+    submit = SubmitField('Save Client')
 
 class EnrollmentForm(FlaskForm):
     programs = SelectMultipleField('Programs', coerce=int)
