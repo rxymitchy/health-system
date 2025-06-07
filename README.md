@@ -139,9 +139,4 @@ health-system/
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## Contact
-
-For questions or support, contact:  
-[Your Name] - [lucianamitchell19@gmail.com]  
-Project Link: [https://github.com/yourusername/health-system](https://github.com/yourusername/health-system)
 ```
